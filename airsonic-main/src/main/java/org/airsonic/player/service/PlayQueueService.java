@@ -45,6 +45,8 @@ public class PlayQueueService {
     @Autowired
     private LastFmService lastFmService;
     @Autowired
+    private ListenBrainzService listenBrainzService;
+    @Autowired
     private SearchService searchService;
     @Autowired
     private RatingService ratingService;
@@ -346,6 +348,17 @@ public class PlayQueueService {
         List<MediaFile> similarSongs = lastFmService.getSimilarSongs(artist, count, musicFolders);
 
         doPlay(player, similarSongs, null, sessionId);
+    }
+
+    public void playRecommended(Player player, int count, String sessionId) {
+        List<MusicFolder> musicFolders = settingsService.getMusicFoldersForUser(player.getUsername());
+        //RandomSearchCriteria criteria = new RandomSearchCriteria(40, null, null, null, musicFolders);
+        List<MediaFile> recommendedFiles = listenBrainzService.getRecommendedSongs(count, "similar", player.getUsername(), musicFolders);
+
+        player.getPlayQueue().addFiles(false, recommendedFiles);
+
+
+        doPlay(player, recommendedFiles, null, sessionId);
     }
 
     private void doPlay(Player player, List<MediaFile> files, InternetRadio radio, String sessionId) {

@@ -53,7 +53,7 @@ public class CredentialsManagementController {
     public static final Map<App, AppCredSettings> APPS_CREDS_SETTINGS = ImmutableMap.of(
             App.AIRSONIC, new AppCredSettings(false, true),
             App.LASTFM, new AppCredSettings(true, false),
-            App.LISTENBRAINZ, new AppCredSettings(false, false));
+            App.LISTENBRAINZ, new AppCredSettings(true, false));
 
     private static final Map<String, String> ENCODER_ALIASES = ImmutableMap.of("noop", "plaintext", "legacynoop",
             "legacyplaintext (deprecated)", "legacyhex", "legacyhex (deprecated)");

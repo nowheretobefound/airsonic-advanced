@@ -264,6 +264,23 @@
             </tr>
         </table>
     </form>
+
+    <h2>
+        <img src="<spring:theme code='shuffleImage'/>" alt=""/>
+        <span style="vertical-align: middle"><fmt:message key="more.recommended.title"/></span>
+    </h2>
+
+     <form id="recommendedPlayQueue" method="post" action="recommendedPlayQueue.view?">
+        <sec:csrfInput />
+        <table>
+            <tr>
+                <td>
+                  <input type="submit" name="autoRandom" value="<fmt:message key='more.recommended.radio'/>">
+                </td>
+            </tr>
+        </table>
+    </form>
+
 </c:if>
 
 <a href="https://airsonic.github.io/docs/apps/" target="_blank" rel="noopener noreferrer"><img alt="Apps" src="<c:url value='/icons/default_light/apps.png'/>" style="float: right;margin-left: 3em; margin-right: 3em"/></a>
