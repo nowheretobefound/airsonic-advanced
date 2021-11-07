@@ -86,7 +86,7 @@ public class ListenBrainzService {
         }
         return null;
     }
-    private static final String decode(UserCredential uc) {
+    private static String decode(UserCredential uc) {
         PasswordDecoder decoder = (PasswordDecoder) GlobalSecurityConfig.ENCODERS.get(uc.getEncoder());
         try {
             return decoder.decode(uc.getCredential());
@@ -105,14 +105,9 @@ public class ListenBrainzService {
                 sb.append(line).append("\n");
             }
         } catch (IOException e) {
-            LOG.error("Error while streaming to string: {}", e);
-        } finally {
-            try {
-                stream.close();
-            } catch (IOException e) {
-                //NO-OP
-            }
+            LOG.error("Error while streaming to string:", e);
         }
+
         return sb.toString();
     }
 
@@ -133,7 +128,7 @@ public class ListenBrainzService {
         //request.setHeader("Content-type", "application/json; charset=utf-8");
         String json;
         try (CloseableHttpClient client = HttpClients.createDefault();
-             CloseableHttpResponse resp = client.execute(request);) {
+             CloseableHttpResponse resp = client.execute(request)) {
             boolean ok = resp.getStatusLine().getStatusCode() == 200;
             boolean notFound = resp.getStatusLine().getStatusCode() == 404;
             if (!ok) {
@@ -143,8 +138,9 @@ public class ListenBrainzService {
                 }
                 return Collections.emptyList();
             }
-
-            json = streamToString(resp.getEntity().getContent());
+            try (InputStream is = resp.getEntity().getContent()) {
+                json = streamToString(is);
+            }
 
             LOG.error(json);
 
